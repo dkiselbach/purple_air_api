@@ -8,6 +8,8 @@ gemspec
 gem 'rake', '~> 13.0'
 
 group :test, :development do
+  gem 'faker'
   gem 'rspec', '~> 3.0'
-  gem 'rubocop'
+  gem 'rubocop', '~> 1.9'
+  gem 'webmock'
 end
