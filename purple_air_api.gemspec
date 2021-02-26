@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
                         by contacting their support team https://www2.purpleair.com/pages/contact-us.'
   spec.homepage      = 'https://github.com/dkiselbach/purple_air_api'
   spec.license       = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.7.0')
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/dkiselbach/purple_air_api.'

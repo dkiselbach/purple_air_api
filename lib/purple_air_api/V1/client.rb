@@ -15,6 +15,10 @@ module PurpleAirApi
         @write_client = create_http_client(write_token)
       end
 
+      def request_sensor_data
+        GetSensors.call(client: read_client)
+      end
+
       private
 
       def create_http_client(token)

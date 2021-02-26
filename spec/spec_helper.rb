@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'purple_air_api'
-require 'factory_bot'
 require 'faker'
+require 'webmock'
+require_relative 'support/webmock_helper'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -14,4 +15,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  WebMock.enable!
 end
