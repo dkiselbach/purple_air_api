@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'faraday'
-
 module PurpleAirApi
   module V1
     # Client class for interfacing with the V1 PurpleAir API. Refer to the instance methods to learn more about what

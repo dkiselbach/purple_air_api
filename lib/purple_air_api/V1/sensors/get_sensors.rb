@@ -85,8 +85,8 @@ module PurpleAirApi
       end
 
       def parse_response
-        parsed_response = JSON.parse(response.body)
-        fields, data = parsed_response.values_at('fields', 'data')
+        parsed_response = FastJsonparser.parse(response.body)
+        fields, data = parsed_response.values_at(:fields, :data)
 
         data.each do |sensor|
           sensor_index = sensor.first
