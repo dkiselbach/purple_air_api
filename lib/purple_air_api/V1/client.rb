@@ -22,11 +22,15 @@ module PurpleAirApi
       end
 
       # Makes a request to the sensors endpoint and returns a parsed JSON.
-      # @!method request_sensor_data
-      #
+      # @!method request_sensor_data(options)
+      # @param [Hash] options A hash of options { :option_name=>value }
+      # @option options [Array<Integer>] :sensors_index An array of indexes for the sensors you want to request.
+      # @option options [Array<String>] :location_Type An array of strings specifying sensor location. Defaults to ['outside', 'inside'].
+      # @option options [Array<String>] :fields An array of fields you want returned. Defaults to ['icon', 'name', 'latitude', 'longitude', 'altitude', 'pm1.0']
+      # @return [JSON]
 
-      def request_sensor_data
-        GetSensors.call(client: read_client)
+      def request_sensor_data(options)
+        GetSensors.call(client: read_client, **options)
       end
 
       private
