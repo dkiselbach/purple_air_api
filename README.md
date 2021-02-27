@@ -1,8 +1,6 @@
 # PurpleAirApi
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/purple_air_api`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a client for interacting with the PurpleAir API. This was written using the V1 of the API. In order to use this gem, you must have been granted read and write tokens from PurpleAir.
 
 ## Installation
 
@@ -22,7 +20,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use this gem, instantiate an instance of a PurpleAirApi client by making the following request:
+
+`client = PurpleAirApi::V1::Client.new(read_token: your_read_token, write_token: your_write_token)`
+
+You can then use this client to interact with the various API methods under the client like:
+
+`client.get_sensors(options)` 
+
+Options would be and of the parameters you would like to pass onto the PurpleAir API. The gem will parse the parameters into the format required by the API.
 
 ## Development
 
@@ -32,7 +38,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/purple_air_api. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/purple_air_api/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/dkiselbach/purple_air_api. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/dkiselbach/purple_air_api/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -40,4 +46,6 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the PurpleAirApi project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/purple_air_api/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the PurpleAirApi project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/dkiselbach/purple_air_api/CODE_OF_CONDUCT.md).
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](code_of_conduct.md)

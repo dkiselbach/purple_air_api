@@ -10,6 +10,9 @@ module PurpleAirApi
 
       attr_reader :read_client, :write_client
 
+      # @example
+      #
+
       def initialize(read_token:, write_token:)
         @read_client = create_http_client(read_token)
         @write_client = create_http_client(write_token)

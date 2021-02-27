@@ -12,4 +12,7 @@ group :test, :development do
   gem 'rspec', '~> 3.0'
   gem 'rubocop', '~> 1.9'
   gem 'webmock'
+  gem 'yard'
+  # for yard
+  gem 'webrick'
 end
