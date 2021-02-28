@@ -99,10 +99,7 @@ module PurpleAirApi
         end
 
         {
-          nwlat: coordinates[:nw][0],
-          nwlng: coordinates[:nw][1],
-          selat: coordinates[:se][0],
-          selng: coordinates[:se][1]
+          nwlat: coordinates[:nw][0], nwlng: coordinates[:nw][1], selat: coordinates[:se][0], selng: coordinates[:se][1]
         }
       end
 
