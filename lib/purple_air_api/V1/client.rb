@@ -36,6 +36,7 @@ module PurpleAirApi
       def create_http_client(token)
         Faraday.new(url: API_URL) do |faraday|
           faraday.headers['X-API-KEY'] = token
+          faraday.use RaiseHttpException
         end
       end
     end

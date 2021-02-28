@@ -20,7 +20,7 @@ module PurpleAirApi
         @http_client = client
         @request_options = {}
         @parsed_response = {}
-        create_options_hash(**options)
+        create_options_hash(options)
       end
 
       def request
@@ -118,6 +118,7 @@ module PurpleAirApi
 
       def parse_response(response)
         response_hash = FastJsonparser.parse(response.body)
+
         fields, data, api_version,
           time_stamp, date_time_stamp, max_age = response_hash.values_at(:fields, :data, :api_version, :time_stamp,
                                                                          :date_time_stamp, :max_age)
@@ -141,9 +142,6 @@ module PurpleAirApi
           end
         end
       end
-    end
-
-    class OptionsError < StandardError
     end
   end
 end

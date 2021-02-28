@@ -59,7 +59,7 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
   describe '#request' do
     subject(:get_sensors_request) { described_class.call(client: client.read_client, **options) }
 
-    context 'when read_token is valid' do
+    context 'when read_token and options are valid' do
       before do
         WebMock.stub_request(:get, 'https://api.purpleair.com/v1/sensors')
                .with(headers: { 'X-API-KEY': read_token },
@@ -90,6 +90,66 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
       it 'returns correct number of data points' do
         expect(get_sensors_request.parsed_response[:data].count).to eql(10)
       end
+    end
+
+    context 'when read token is invalid' do
+      before do
+        WebMock.stub_request(:get, 'https://api.purpleair.com/v1/sensors')
+               .with(headers: { 'X-API-KEY': read_token },
+                     query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
+               .to_return(
+                 body: WebmockHelper.response_body('V1/get_sensors_api_key_invalid_error.json'),
+                 status: 403,
+                 headers: { 'content-type' => 'application/json' }
+               )
+      end
+
+      it 'raises ApiError' do
+        expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::ApiKeyInvalidError)
+      end
+    end
+
+    context 'when field is invalid' do
+      before do
+        WebMock.stub_request(:get, 'https://api.purpleair.com/v1/sensors')
+               .with(headers: { 'X-API-KEY': read_token },
+                     query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
+               .to_return(
+                 body: WebmockHelper.response_body('V1/get_sensors_invalid_field_error.json'),
+                 status: 400,
+                 headers: { 'content-type' => 'application/json' }
+               )
+      end
+
+      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::InvalidFieldError) }
+    end
+
+    context 'when error is unknown' do
+      before do
+        WebMock.stub_request(:get, 'https://api.purpleair.com/v1/sensors')
+               .with(headers: { 'X-API-KEY': read_token },
+                     query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
+               .to_return(
+                 body: WebmockHelper.response_body('V1/get_sensors_unknown_error.json'),
+                 status: 400,
+                 headers: { 'content-type' => 'application/json' }
+               )
+      end
+
+      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::UnknownApiError) }
+    end
+
+    context 'when error is unknown' do
+      before do
+        WebMock.stub_request(:get, 'https://api.purpleair.com/v1/sensors')
+               .with(headers: { 'X-API-KEY': read_token },
+                     query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
+               .to_return(
+                 status: 500
+               )
+      end
+
+      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::InternalServerError) }
     end
   end
 end
