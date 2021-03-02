@@ -2,31 +2,50 @@
 
 module PurpleAirApi
   module V1
-    # Class for requesting sensor from the PurpleAirAPI
+    # Class for requesting sensor data. This will return the data in a parsed hash, or you can use the original HTTP
+    # response or the JSON response.
     class GetSensors
-      attr_accessor :request_options, :parsed_response, :http_response
+      attr_accessor :request_options, :http_response
       attr_reader :http_client
+      attr_writer :parsed_response
 
-      DEFAULT_FIELDS = %w[icon name latitude longitude altitude pm1.0].freeze
+      DEFAULT_FIELDS = %w[icon name latitude longitude altitude pm2.5].freeze
       DEFAULT_LOCATION_TYPE = %w[outside inside].freeze
 
       URL = 'https://api.purpleair.com/v1/sensors'
+
+      # Calls initialize and requests the data from PurpleAir
+      # @!method call(...)
 
       def self.call(...)
         new(...).request
       end
 
+      # Creates a HTTP friendly options hash depending on your inputs
+      # @!method initialize(client:, **options)
+      # @param client [Faraday::Connection] Your HTTP client initialized in Client
+      # @param **options [Hash] Your HTTP options for the request.
+
       def initialize(client:, **options)
         @http_client = client
         @request_options = {}
-        @parsed_response = {}
         create_options_hash(options)
       end
 
+      # Makes a get request to the PurpleAir Get Sensors Data endpoint https://api.purpleair.com/v1/sensors.
+      # @!method request
+      # @return [PurpleAirApi::V1::GetSensors]
       def request
         self.http_response = http_client.get(URL, request_options)
-        parse_response(http_response)
         self
+      end
+
+      def parsed_response
+        @parsed_response ||= parse_response
+      end
+
+      def json_response
+        @json_response ||= FastJsonparser.parse(http_response.body)
       end
 
       private
@@ -113,21 +132,23 @@ module PurpleAirApi
         { read_keys: keys.join(',') }
       end
 
-      def parse_response(response)
-        response_hash = FastJsonparser.parse(response.body)
+      def parse_response
+        response_hash = json_response
 
         fields, data, api_version,
           time_stamp, date_time_stamp, max_age = response_hash.values_at(:fields, :data, :api_version, :time_stamp,
+
                                                                          :date_time_stamp, :max_age)
-        parsed_response.merge!({
+        self.parsed_response = {
                                  fields: fields,
                                  api_version: api_version,
                                  time_stamp: time_stamp,
                                  data_time_stamp: date_time_stamp,
                                  max_age: max_age,
                                  data: {}
-                               })
+                               }
         generate_indexed_hash(data, fields)
+        parsed_response
       end
 
       def generate_indexed_hash(data, fields)

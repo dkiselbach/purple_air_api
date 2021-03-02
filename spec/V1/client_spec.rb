@@ -23,7 +23,7 @@ RSpec.describe PurpleAirApi::V1::Client do
       it 'makes a request to the get_sensors class' do
         allow(PurpleAirApi::V1::GetSensors).to receive(:call).and_return({})
 
-        subject.request_sensor_data({})
+        subject.request_sensors({})
         expect(PurpleAirApi::V1::GetSensors).to have_received(:call)
       end
     end

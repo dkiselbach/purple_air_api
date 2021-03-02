@@ -11,7 +11,6 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
     subject(:get_sensors) { described_class.new(client: client.read_client, **options) }
     context 'when only field options are given' do
       it { expect(get_sensors.http_client.class).to eq(Faraday::Connection) }
-      it { expect(get_sensors.parsed_response).to eq({}) }
       it { expect(get_sensors.request_options).to eq({ fields: 'icon,name,latitude,longitude,altitude,pm1.0' }) }
     end
 
