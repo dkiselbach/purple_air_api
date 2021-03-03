@@ -22,7 +22,7 @@ Or install it yourself as:
 
 To use this gem, instantiate an instance of a PurpleAirApi client by making the following request:
 
-`client = PurpleAirApi::V1::Client.new(read_token: your_read_token, write_token: your_write_token)`
+`client = PurpleAirApi.client(read_token: your_read_token, write_token: your_write_token)`
 
 You can then use this client to interact with the various API methods under the client like:
 

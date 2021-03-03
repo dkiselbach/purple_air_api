@@ -13,6 +13,10 @@ module PurpleAirApi
   # Alias for PurpleAirApi::V1::Client.new
   #
   # @return [PurpleAirApi::V1::Client]
+  # @example requesting data for a few sensors
+  #   options = { fields: ['icon', 'name'], location_type: ['outside'], show_only: [26, 41], max_age: 3600}
+  #   PurpleAirApi.client(read_token: "1234", write_token: "1234").request_sensors(options)
+
   def self.client(read_token:, write_token:)
     PurpleAirApi::V1::Client.new(read_token: read_token, write_token: write_token)
   end

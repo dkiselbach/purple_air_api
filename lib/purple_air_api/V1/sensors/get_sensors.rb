@@ -2,8 +2,7 @@
 
 module PurpleAirApi
   module V1
-    # Class for requesting sensor data. This will return the data in a parsed hash, or you can use the original HTTP
-    # response or the JSON response.
+    # Class for requesting sensor data. This will return different response formats from the API.
     class GetSensors
       attr_accessor :request_options, :http_response
       attr_reader :http_client
@@ -14,7 +13,7 @@ module PurpleAirApi
 
       URL = 'https://api.purpleair.com/v1/sensors'
 
-      # Calls initialize and requests the data from PurpleAir
+      # Calls initializes the class and requests the data from PurpleAir.
       # @!method call(...)
 
       def self.call(...)
@@ -35,14 +34,48 @@ module PurpleAirApi
       # Makes a get request to the PurpleAir Get Sensors Data endpoint https://api.purpleair.com/v1/sensors.
       # @!method request
       # @return [PurpleAirApi::V1::GetSensors]
+
       def request
         self.http_response = http_client.get(URL, request_options)
         self
       end
 
+      # Takes the raw response from PurpleAir and generates a hash indexed by sensor index. You can use this response
+      # like a normal hash object. This GetSensorsClass.parsed_response[:47] would return a hash of data for sensor 47
+      # with each hash key labelling the associated data.
+      # @!method parsed_response
+      # @return [Hash]
+      # @example parsed_response example
+      #   response.parsed_response
+      #   {
+      #     :fields=>["sensor_index", "name", "icon", "latitude", "longitude", "altitude", "pm2.5"],
+      #     :api_version=>"V1.0.6-0.0.9",
+      #     :time_stamp=>1614787814,
+      #     :data_time_stamp=>nil,
+      #     :max_age=>3600,
+      #     :data=>
+      #     {20=>{"sensor_index"=>20, "name"=>"Oakdale", "icon"=>0, "latitude"=>40.6031, "longitude"=>-111.8361, "altitude"=>4636, "pm2.5"=>0.0},
+      #     47=>{"sensor_index"=>47, "name"=>"OZONE TEST", "icon"=>0, "latitude"=>40.4762, "longitude"=>-111.8826, "altitude"=>nil, "pm2.5"=>nil}}
+      #   }
+
       def parsed_response
         @parsed_response ||= parse_response
       end
+
+      # Takes the raw response from PurpleAir and parses the JSON.
+      # @!method parsed_response
+      # @return [Json]
+      # @example json_response example
+      #   response.json_response
+      #   {
+      #     :api_version=>"V1.0.6-0.0.9",
+      #     :time_stamp=>1614787814,
+      #     :data_time_stamp=>1614787807,
+      #     :location_type=>0,
+      #     :max_age=>3600,
+      #     :fields=>["sensor_index", "name", "icon", "latitude", "longitude", "altitude", "pm2.5"],
+      #     :data=>[[20, "Oakdale", 0, 40.6031, -111.8361, 4636, 0.0], [47, "OZONE TEST", 0, 40.4762, -111.8826, nil, nil]]
+      #   }
 
       def json_response
         @json_response ||= FastJsonparser.parse(http_response.body)
