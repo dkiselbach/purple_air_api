@@ -1,0 +1,6 @@
+{
+  "api_version": "V1.0.6-0.0.9",
+  "time_stamp": 1614532775,
+  "error": "RequiresHttpsError",
+  "description": "HTTPS is required to access this service."
+}

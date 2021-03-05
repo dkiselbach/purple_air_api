@@ -170,16 +170,15 @@ module PurpleAirApi
 
         fields, data, api_version,
           time_stamp, date_time_stamp, max_age = response_hash.values_at(:fields, :data, :api_version, :time_stamp,
-
                                                                          :date_time_stamp, :max_age)
         self.parsed_response = {
-                                 fields: fields,
-                                 api_version: api_version,
-                                 time_stamp: time_stamp,
-                                 data_time_stamp: date_time_stamp,
-                                 max_age: max_age,
-                                 data: {}
-                               }
+          fields: fields,
+          api_version: api_version,
+          time_stamp: time_stamp,
+          data_time_stamp: date_time_stamp,
+          max_age: max_age,
+          data: {}
+        }
         generate_indexed_hash(data, fields)
         parsed_response
       end

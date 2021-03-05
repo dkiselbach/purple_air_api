@@ -7,6 +7,7 @@ require_relative 'purple_air_api/V1/client'
 require_relative 'purple_air_api/V1/raise_http_exception'
 require_relative 'purple_air_api/V1/errors'
 require_relative 'purple_air_api/v1/sensors/get_sensors'
+require_relative 'purple_air_api/v1/sensors/errors'
 
 # The PurpleAirApi is a gem intended to be used to interact with the PurpleAir API easily.
 module PurpleAirApi

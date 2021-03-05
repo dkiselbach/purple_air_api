@@ -64,7 +64,7 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
                .with(headers: { 'X-API-KEY': read_token },
                      query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
                .to_return(
-                 body: WebmockHelper.response_body('V1/get_sensors.json'),
+                 body: WebmockHelper.response_body('V1/get_sensors/response.json'),
                  status: 200,
                  headers: { 'content-type' => 'application/json' }
                )
@@ -97,14 +97,14 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
                .with(headers: { 'X-API-KEY': read_token },
                      query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
                .to_return(
-                 body: WebmockHelper.response_body('V1/get_sensors_api_key_invalid_error.json'),
+                 body: WebmockHelper.response_body('V1/errors/api_key_invalid_error.json'),
                  status: 403,
                  headers: { 'content-type' => 'application/json' }
                )
       end
 
       it 'raises ApiError' do
-        expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::ApiKeyInvalidError)
+        expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::ApiKeyError)
       end
     end
 
@@ -114,13 +114,17 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
                .with(headers: { 'X-API-KEY': read_token },
                      query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
                .to_return(
-                 body: WebmockHelper.response_body('V1/get_sensors_invalid_field_error.json'),
+                 body: WebmockHelper.response_body('V1/get_sensors/invalid_field_error.json'),
                  status: 400,
                  headers: { 'content-type' => 'application/json' }
                )
       end
 
-      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::InvalidFieldError) }
+      it 'raises ApiError with error type' do
+        expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::ApiError) do |error|
+          expect(error.error_type).to eq('InvalidFieldValueError')
+        end
+      end
     end
 
     context 'when error is unknown' do
@@ -129,13 +133,13 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
                .with(headers: { 'X-API-KEY': read_token },
                      query: { fields: 'icon,name,latitude,longitude,altitude,pm1.0' })
                .to_return(
-                 body: WebmockHelper.response_body('V1/get_sensors_unknown_error.json'),
+                 body: WebmockHelper.response_body('V1/errors/unknown_error.json'),
                  status: 400,
                  headers: { 'content-type' => 'application/json' }
                )
       end
 
-      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::UnknownApiError) }
+      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::ApiError) }
     end
 
     context 'when error is unknown' do

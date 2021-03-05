@@ -2,29 +2,36 @@
 
 module PurpleAirApi
   module V1
-    # The base error which all custom errors will inherit from
+    # A custom error class for rescuing from all PurpleAir API errors
     class BaseError < StandardError
-      attr_reader :object
+      attr_reader :response_object, :error_type
 
-      def initialize(message, object = nil)
+      def initialize(message, error_type, response_object)
         super(message)
-        @object = object
+        @error_type = error_type
+        @response_object = response_object
       end
     end
 
-    class ApiKeyInvalidError < BaseError
+    # Raised when the PurpleAir API returns the HTTP status code 403
+    class ApiKeyError < BaseError
     end
 
-    class InvalidFieldError < BaseError
+    # Raised when the PurpleAir API returns the HTTP status code 415
+    class MissingJsonPayloadError < BaseError
     end
 
-    class UnknownApiError < BaseError
+    # Raised when the PurpleAir API returns the HTTP status code 400. Use the message and error_type on the Error
+    # object to determine additional information regarding the error.
+    class ApiError < BaseError
     end
 
+    # Raised when the PurpleAir API returns the HTTP status code 404
+    class NotFoundError < BaseError
+    end
+
+    # Raised when the PurpleAir API returns the HTTP status code 500
     class InternalServerError < BaseError
-    end
-
-    class OptionsError < BaseError
     end
   end
 end
