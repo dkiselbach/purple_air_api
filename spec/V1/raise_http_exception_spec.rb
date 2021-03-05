@@ -32,40 +32,40 @@ RSpec.describe PurpleAirApi::V1::RaiseHttpException do
             expect(error.response_object).to be_instance_of(Faraday::Env)
           end
         end
+      end
 
-        context 'when key is missing' do
-          let(:path) { 'V1/errors/api_key_missing_error.json' }
+      context 'when key is missing' do
+        let(:path) { 'V1/errors/api_key_missing_error.json' }
 
-          it 'raises ApiKeyMissingError' do
-            expect { request }.to raise_error(described_class) do |error|
-              expect(error.message).to eq 'No API key was found in the request.'
-              expect(error.error_type).to eq 'ApiKeyMissingError'
-              expect(error.response_object).to be_instance_of(Faraday::Env)
-            end
+        it 'raises ApiKeyMissingError' do
+          expect { request }.to raise_error(described_class) do |error|
+            expect(error.message).to eq 'No API key was found in the request.'
+            expect(error.error_type).to eq 'ApiKeyMissingError'
+            expect(error.response_object).to be_instance_of(Faraday::Env)
           end
         end
+      end
 
-        context 'when key is restricted' do
-          let(:path) { 'V1/errors/api_key_restricted_error.json' }
+      context 'when key is restricted' do
+        let(:path) { 'V1/errors/api_key_restricted_error.json' }
 
-          it 'raises ApiKeyRestrictedError' do
-            expect { request }.to raise_error(described_class) do |error|
-              expect(error.message).to eq 'The provided API key is restricted to certain hosts or referrers.'
-              expect(error.error_type).to eq 'ApiKeyRestrictedError'
-              expect(error.response_object).to be_instance_of(Faraday::Env)
-            end
+        it 'raises ApiKeyRestrictedError' do
+          expect { request }.to raise_error(described_class) do |error|
+            expect(error.message).to eq 'The provided API key is restricted to certain hosts or referrers.'
+            expect(error.error_type).to eq 'ApiKeyRestrictedError'
+            expect(error.response_object).to be_instance_of(Faraday::Env)
           end
         end
+      end
 
-        context 'when key is the wrong type' do
-          let(:path) { 'V1/errors/api_key_type_mismatch_error.json' }
+      context 'when key is the wrong type' do
+        let(:path) { 'V1/errors/api_key_type_mismatch_error.json' }
 
-          it 'raises ApiKeyTypeMismatchError' do
-            expect { request }.to raise_error(described_class) do |error|
-              expect(error.message).to eq 'The provided key was of the wrong type (READ or WRITE).'
-              expect(error.error_type).to eq 'ApiKeyTypeMismatchError'
-              expect(error.response_object).to be_instance_of(Faraday::Env)
-            end
+        it 'raises ApiKeyTypeMismatchError' do
+          expect { request }.to raise_error(described_class) do |error|
+            expect(error.message).to eq 'The provided key was of the wrong type (READ or WRITE).'
+            expect(error.error_type).to eq 'ApiKeyTypeMismatchError'
+            expect(error.response_object).to be_instance_of(Faraday::Env)
           end
         end
       end
