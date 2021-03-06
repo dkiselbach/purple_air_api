@@ -30,6 +30,10 @@ You can then use this client to interact with the various API methods under the 
 
 Options would be and of the parameters you would like to pass onto the PurpleAir API. The gem will parse the parameters into the format required by the API.
 
+## Documentation
+
+Documentation for this gem can be found [here.](https://dkiselbach.github.io/purple_air_api/)
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
