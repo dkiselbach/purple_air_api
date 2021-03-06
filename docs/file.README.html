@@ -87,15 +87,21 @@ gem 'purple_air_api'
 
 <p>You can then use this client to interact with the various API methods under the client like:</p>
 
-<p><code>client.get_sensors(options)</code></p>
+<p><code>client.request_sensors(options)</code></p>
 
 <p>Options would be and of the parameters you would like to pass onto the PurpleAir API. The gem will parse the parameters into the format required by the API.</p>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>Documentation for this gem can be found <a href="https://dkiselbach.github.io/purple_air_api/">here.</a>.</p>
 
 <h2 id="development">Development</h2>
 
 <p>After checking out the repo, run <code>bin/setup</code> to install dependencies. Then, run <code>rake spec</code> to run the tests. You can also run <code>bin/console</code> for an interactive prompt that will allow you to experiment.</p>
 
 <p>To install this gem onto your local machine, run <code>bundle exec rake install</code>. To release a new version, update the version number in <code>version.rb</code>, and then run <code>bundle exec rake release</code>, which will create a git tag for the version, push git commits and the created tag, and push the <code>.gem</code> file to <a href="https://rubygems.org">rubygems.org</a>.</p>
+
+<p>Make sure you are updating the Yard docs prior to pushing to master by running <code>rake yard</code>.</p>
 
 <h2 id="contributing">Contributing</h2>
 
@@ -107,13 +113,13 @@ gem 'purple_air_api'
 
 <h2 id="code-of-conduct">Code of Conduct</h2>
 
-<p>Everyone interacting in the PurpleAirApi project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the <a href="https://github.com/dkiselbach/purple_air_api/CODE_OF_CONDUCT.md">code of conduct</a>.</p>
+<p>Everyone interacting in the PurpleAirApi project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the <a href="https://github.com/dkiselbach/purple_air_api/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>.</p>
 
 <p><a href="code_of_conduct.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg" alt="Contributor Covenant" /></a></p>
 </div></div>
 
       <div id="footer">
-  Generated on Sat Mar  6 13:09:14 2021 by
+  Generated on Sat Mar  6 13:41:30 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.26 (ruby-3.0.0).
 </div>
