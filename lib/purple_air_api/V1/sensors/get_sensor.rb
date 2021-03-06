@@ -18,9 +18,10 @@ module PurpleAirApi
       end
 
       # Creates a HTTP friendly options hash depending on your inputs
-      # @!method initialize(client:, **options)
+      # @!method initialize(client:, sensor_index:, read_key: nil)
       # @param client [Faraday::Connection] Your HTTP client initialized in Client
-      # @param options [Hash] Your HTTP options for the request.
+      # @param sensor_index [Integer] The sensor_index for the sensor you want to request data from.
+      # @param read_key [String] The read_key for the sensor you want to request data from if it is a private sensor.
 
       def initialize(client:, sensor_index:, read_key: nil)
         @http_client = client
@@ -43,9 +44,9 @@ module PurpleAirApi
         json_response
       end
 
-      # Takes the raw response from PurpleAir and parses the JSON.
+      # Takes the raw response from PurpleAir and parses the JSON into a Hash.
       # @!method json_response
-      # @return [Json]
+      # @return [Hash]
       # @example json_response example
       #   response.json_response
       #   {

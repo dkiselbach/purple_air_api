@@ -70,9 +70,9 @@ module PurpleAirApi
         @parsed_response ||= parse_response
       end
 
-      # Takes the raw response from PurpleAir and parses the JSON.
+      # Takes the raw response from PurpleAir and parses the JSON into a Hash.
       # @!method json_response
-      # @return [Json]
+      # @return [Hash]
       # @example json_response example
       #   response.json_response
       #   {

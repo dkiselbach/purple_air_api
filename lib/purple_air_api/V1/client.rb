@@ -23,7 +23,7 @@ module PurpleAirApi
         @write_client = create_http_client(write_token) unless write_token.nil?
       end
 
-      # Makes a request to the sensors endpoint and returns an instance of the V1::GetSensors class.
+      # Makes a request to the sensors INDEX endpoint and returns an instance of the V1::GetSensors class.
       # @!method request_sensors(options)
       # @param [Hash] options A hash of options { :option_name=>value }
       # @option options [Array<Integer>] :show_only An array of indexes for the sensors you want to request.
@@ -45,6 +45,16 @@ module PurpleAirApi
       def request_sensors(options = {})
         GetSensors.call(client: read_client, **options)
       end
+
+      # Makes a request to the individual sensor SHOW endpoint and returns an instance of the V1::GetSensors class.
+      # @!method request_sensor(sensor_index, read_key: nil)
+      # @param sensor_index [Integer] The sensor_index for the sensor you want to request data from.
+      # @param read_key [String] The read_key for the sensor you want to request data from if it is a private sensor.
+      # @return [PurpleAirApi::GetSensor]
+      # @example request sensor data for a few sensors
+      #   client = PurpleAirApi::V1::Client.new(read_token: "1234")
+      #   response = client.request_sensor(sensor_index: 20)
+      #   response_hash = response.parsed_response
 
       def request_sensor(sensor_index:, read_key: nil)
         GetSensor.call(client: read_client, sensor_index: sensor_index, read_key: read_key)
