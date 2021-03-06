@@ -26,7 +26,7 @@ To use this gem, instantiate an instance of a PurpleAirApi client by making the 
 
 You can then use this client to interact with the various API methods under the client like:
 
-`client.get_sensors(options)` 
+`client.request_sensors(options)` 
 
 Options would be and of the parameters you would like to pass onto the PurpleAir API. The gem will parse the parameters into the format required by the API.
 
@@ -46,6 +46,6 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the PurpleAirApi project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/dkiselbach/purple_air_api/CODE_OF_CONDUCT.md).
+Everyone interacting in the PurpleAirApi project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/dkiselbach/purple_air_api/blob/master/CODE_OF_CONDUCT.md).
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](code_of_conduct.md)
