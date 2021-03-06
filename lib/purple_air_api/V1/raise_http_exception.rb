@@ -2,8 +2,10 @@
 
 module PurpleAirApi
   module V1
-    # @private
+    # Handles any HTTP exceptions for 400 and 500 error codes
     class RaiseHttpException < Faraday::Middleware
+
+      # A switch statement which determines which error to raise depending on error code
       def call(env)
         @app.call(env).on_complete do |response|
           self.response = response
@@ -22,6 +24,7 @@ module PurpleAirApi
         end
       end
 
+      # Faraday syntax for implementing middleware
       def initialize(app)
         super app
         @parser = nil

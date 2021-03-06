@@ -8,9 +8,13 @@ module PurpleAirApi
       attr_reader :http_client
       attr_writer :parsed_response
 
+      # The default value for fields that will be returned by PurpleAir
       DEFAULT_FIELDS = %w[icon name latitude longitude altitude pm2.5].freeze
+
+      # The default location type for the sensor
       DEFAULT_LOCATION_TYPE = %w[outside inside].freeze
 
+      # The endpoint URL
       URL = 'https://api.purpleair.com/v1/sensors'
 
       # Calls initializes the class and requests the data from PurpleAir.
@@ -23,7 +27,7 @@ module PurpleAirApi
       # Creates a HTTP friendly options hash depending on your inputs
       # @!method initialize(client:, **options)
       # @param client [Faraday::Connection] Your HTTP client initialized in Client
-      # @param **options [Hash] Your HTTP options for the request.
+      # @param options [Hash] Your HTTP options for the request.
 
       def initialize(client:, **options)
         @http_client = client
@@ -54,8 +58,10 @@ module PurpleAirApi
       #     :data_time_stamp=>nil,
       #     :max_age=>3600,
       #     :data=>
-      #     {20=>{"sensor_index"=>20, "name"=>"Oakdale", "icon"=>0, "latitude"=>40.6031, "longitude"=>-111.8361, "altitude"=>4636, "pm2.5"=>0.0},
-      #     47=>{"sensor_index"=>47, "name"=>"OZONE TEST", "icon"=>0, "latitude"=>40.4762, "longitude"=>-111.8826, "altitude"=>nil, "pm2.5"=>nil}}
+      #     {
+      #       20=>{"sensor_index"=>20, "name"=>"Oakdale", "icon"=>0, "latitude"=>40.6031, "longitude"=>-111.8361, "altitude"=>4636, "pm2.5"=>0.0},
+      #       47=>{"sensor_index"=>47, "name"=>"OZONE TEST", "icon"=>0, "latitude"=>40.4762, "longitude"=>-111.8826, "altitude"=>nil, "pm2.5"=>nil}
+      #     }
       #   }
 
       def parsed_response
@@ -63,7 +69,7 @@ module PurpleAirApi
       end
 
       # Takes the raw response from PurpleAir and parses the JSON.
-      # @!method parsed_response
+      # @!method json_response
       # @return [Json]
       # @example json_response example
       #   response.json_response

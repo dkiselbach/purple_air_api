@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 module PurpleAirApi
+  # The V1 API Module for namespacing the PurpleAir V1 API
   module V1
     # Client class for interfacing with the V1 PurpleAir API. Refer to the instance methods to learn more about what
     # methods and API options are available.
     class Client
-      API_URL = 'https://api.purpleair.com/v1/'
-
       attr_reader :read_client, :write_client
+
+      # The base URL for the PurpleAir API
+      API_URL = 'https://api.purpleair.com/v1/'
 
       # Creates a read and write client to interface with the Purple Air API.
       # @!method initialize(read_token:, write_token:)

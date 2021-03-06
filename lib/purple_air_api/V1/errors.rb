@@ -6,6 +6,14 @@ module PurpleAirApi
     class BaseError < StandardError
       attr_reader :response_object, :error_type
 
+
+      # Initialize the error object with error_type and the Faraday response object. PurpleAir returns a human friendly
+      # error message and type which is added here. You can also reference the response to view the raw response
+      # from PurpleAir.
+      # @!method initialize(message, error_type, response_object)
+      # @param message [String] the message you want displayed when the error is raised
+      # @param error_type [String] the error type that PurpleAir includes in the JSON response
+      # @param response_object [Faraday::Env] the Faraday response object
       def initialize(message, error_type, response_object)
         super(message)
         @error_type = error_type
