@@ -59,8 +59,10 @@ module PurpleAirApi
       #     :max_age=>3600,
       #     :data=>
       #     {
-      #       20=>{"sensor_index"=>20, "name"=>"Oakdale", "icon"=>0, "latitude"=>40.6031, "longitude"=>-111.8361, "altitude"=>4636, "pm2.5"=>0.0},
-      #       47=>{"sensor_index"=>47, "name"=>"OZONE TEST", "icon"=>0, "latitude"=>40.4762, "longitude"=>-111.8826, "altitude"=>nil, "pm2.5"=>nil}
+      #       20=>{"sensor_index"=>20, "name"=>"Oakdale", "icon"=>0, "latitude"=>40.6031,
+      #            "longitude"=>-111.8361, "altitude"=>4636, "pm2.5"=>0.0},
+      #       47=>{"sensor_index"=>47, "name"=>"OZONE TEST", "icon"=>0, "latitude"=>40.4762,
+      #            "longitude"=>-111.8826, "altitude"=>nil, "pm2.5"=>nil}
       #     }
       #   }
 
@@ -80,7 +82,10 @@ module PurpleAirApi
       #     :location_type=>0,
       #     :max_age=>3600,
       #     :fields=>["sensor_index", "name", "icon", "latitude", "longitude", "altitude", "pm2.5"],
-      #     :data=>[[20, "Oakdale", 0, 40.6031, -111.8361, 4636, 0.0], [47, "OZONE TEST", 0, 40.4762, -111.8826, nil, nil]]
+      #     :data=>[
+      #               [20, "Oakdale", 0, 40.6031, -111.8361, 4636, 0.0],
+      #               [47, "OZONE TEST", 0, 40.4762, -111.8826, nil, nil]
+      #            ]
       #   }
 
       def json_response
@@ -88,6 +93,8 @@ module PurpleAirApi
       end
 
       private
+
+      attr_accessor :data, :data_fields
 
       def create_options_hash(options)
         request_options.merge!(
@@ -130,6 +137,10 @@ module PurpleAirApi
 
         location_type.map!(&:downcase)
 
+        location_type_parameter(location_type)
+      end
+
+      def location_type_parameter(location_type)
         return {} if location_type.include?('outside') && location_type.include?('inside')
         return { location_type: 1 } if location_type.include?('inside')
         return { location_type: 0 } if location_type.include?('outside')
@@ -172,31 +183,43 @@ module PurpleAirApi
       end
 
       def parse_response
-        response_hash = json_response
+        response = json_response
 
-        fields, data, api_version,
-          time_stamp, date_time_stamp, max_age = response_hash.values_at(:fields, :data, :api_version, :time_stamp,
+        generate_response_hash(response)
+
+        self.data = response[:data]
+        self.data_fields = response[:fields]
+
+        merge_data_hash
+      end
+
+      def generate_response_hash(response_hash)
+        fields, api_version,
+          time_stamp, date_time_stamp, max_age = response_hash.values_at(:fields, :api_version, :time_stamp,
                                                                          :date_time_stamp, :max_age)
         self.parsed_response = {
           fields: fields,
           api_version: api_version,
           time_stamp: time_stamp,
           data_time_stamp: date_time_stamp,
-          max_age: max_age,
-          data: {}
+          max_age: max_age
         }
-        generate_indexed_hash(data, fields)
-        parsed_response
       end
 
-      def generate_indexed_hash(data, fields)
+      def merge_data_hash
+        parsed_response.merge!({ data: generate_data_hash })
+      end
+
+      def generate_data_hash
+        data_hash = {}
         data.each do |sensor|
           sensor_index = sensor.first
-          parsed_response[:data].merge!(sensor_index => {})
+          data_hash.merge!(sensor_index => {})
           sensor.each_with_index do |data_point, index|
-            parsed_response[:data][sensor_index].merge!(fields[index] => data_point)
+            data_hash[sensor_index].merge!(data_fields[index] => data_point)
           end
         end
+        data_hash
       end
     end
   end

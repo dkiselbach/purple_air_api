@@ -79,11 +79,12 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
       end
 
       it 'hash has data labelled by sensor index' do
-        expect(get_sensors_request.parsed_response[:data][20]).to eql({
-                                                                        'altitude' => 4636, 'icon' => 0, 'latitude' => 40.6031,
-                                                                        'longitude' => -111.8361, 'name' => 'Oakdale',
-                                                                        'pm1.0' => 0.0, 'sensor_index' => 20
-                                                                      })
+        data_point = {
+          'altitude' => 4636, 'icon' => 0, 'latitude' => 40.6031,
+          'longitude' => -111.8361, 'name' => 'Oakdale',
+          'pm1.0' => 0.0, 'sensor_index' => 20
+        }
+        expect(get_sensors_request.parsed_response[:data][20]).to eql(data_point)
       end
 
       it 'returns correct number of data points' do
@@ -152,7 +153,7 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
                )
       end
 
-      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::InternalServerError) }
+      it { expect { get_sensors_request }.to raise_error(PurpleAirApi::V1::ServerError) }
     end
   end
 end

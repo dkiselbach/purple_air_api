@@ -4,7 +4,6 @@ module PurpleAirApi
   module V1
     # Handles any HTTP exceptions for 400 and 500 error codes
     class RaiseHttpException < Faraday::Middleware
-
       # A switch statement which determines which error to raise depending on error code
       def call(env)
         @app.call(env).on_complete do |response|
@@ -19,7 +18,7 @@ module PurpleAirApi
           when 415
             raise MissingJsonPayloadError.new(error_message, 'MissingJsonPayloadError', response)
           when 500
-            raise InternalServerError.new(error_message, 'InternalServerError', response)
+            raise ServerError.new(error_message, 'ServerError', response)
           end
         end
       end
@@ -45,7 +44,7 @@ module PurpleAirApi
       end
 
       def unknown_error_message
-        { description: 'Something went wrong in the request' }
+        { description: 'Something went wrong in the request.' }
       end
     end
   end

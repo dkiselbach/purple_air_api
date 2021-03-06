@@ -18,9 +18,9 @@ module PurpleAirApi
       # @example generate a client instance
       #   PurpleAirApi::V1::Client.new(read_token: "1234", write_token: "1234")
 
-      def initialize(read_token:, write_token:)
+      def initialize(read_token:, write_token: nil)
         @read_client = create_http_client(read_token)
-        @write_client = create_http_client(write_token)
+        @write_client = create_http_client(write_token) unless write_token.nil?
       end
 
       # Makes a request to the sensors endpoint and returns an instance of the V1::GetSensors class.
@@ -31,7 +31,9 @@ module PurpleAirApi
       # @option options [Array<String>] :fields An array of fields you want returned.
       # @option options [Integer] :modified_since Only return sensors updated since this timestamp.
       # @option options [Integer] :max_age Only return sensors updated in the last n seconds.
-      # @option options [Hash<array>] :bounding_box A hash with a :nw and :se array { w: [lat,long], se: [lat,long] }.
+      # @option options [Hash<array>] :bounding_box A hash with a :nw and :se array { nw: [lat,long], se: [lat,long] }.
+      # @example
+      #   { bounding_box: { nw: [37.7790262, -122.4199061], se: [37.6535403, -122.4168664]}}
       # @option options [Array<String>] :read_keys An array of read-keys which are required for private devices.
       # @return [PurpleAirApi::GetSensors]
       # @example request sensor data for a few sensors
@@ -40,8 +42,12 @@ module PurpleAirApi
       #   response = client.request_sensors(options)
       #   response_hash = response.parsed_response
 
-      def request_sensors(options)
+      def request_sensors(options = {})
         GetSensors.call(client: read_client, **options)
+      end
+
+      def request_sensor(sensor_index:, read_key: nil)
+        GetSensor.call(client: read_client, sensor_index: sensor_index, read_key: read_key)
       end
 
       private

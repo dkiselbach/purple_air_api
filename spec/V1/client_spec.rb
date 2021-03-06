@@ -16,15 +16,36 @@ RSpec.describe PurpleAirApi::V1::Client do
       it { expect(subject.read_client.url_prefix.to_s).to eq('https://api.purpleair.com/v1/') }
       it { expect(subject.write_client.url_prefix.to_s).to eq('https://api.purpleair.com/v1/') }
     end
+
+    context 'when only read_token is given' do
+      subject(:client) { described_class.new(read_token: read_token) }
+
+      it { expect(client).to be_instance_of(described_class) }
+      it { expect(subject.read_client.headers).to include({ 'X-API-KEY' => read_token }) }
+      it { expect(subject.read_client).to be_instance_of(Faraday::Connection) }
+      it { expect(subject.read_client.url_prefix.to_s).to eq('https://api.purpleair.com/v1/') }
+      it { expect(subject.write_client).to be_nil }
+    end
   end
 
-  describe '#request_sensor_data' do
+  describe '#request_sensors' do
     context 'when valid options given' do
       it 'makes a request to the get_sensors class' do
         allow(PurpleAirApi::V1::GetSensors).to receive(:call).and_return({})
 
-        subject.request_sensors({})
+        subject.request_sensors
         expect(PurpleAirApi::V1::GetSensors).to have_received(:call)
+      end
+    end
+  end
+
+  describe '#request_sensor' do
+    context 'when valid options given' do
+      it 'makes a request to the get_sensors class' do
+        allow(PurpleAirApi::V1::GetSensor).to receive(:call).and_return({})
+
+        subject.request_sensor(sensor_index: 20)
+        expect(PurpleAirApi::V1::GetSensor).to have_received(:call)
       end
     end
   end

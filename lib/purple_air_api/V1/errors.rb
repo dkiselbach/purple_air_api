@@ -6,7 +6,6 @@ module PurpleAirApi
     class BaseError < StandardError
       attr_reader :response_object, :error_type
 
-
       # Initialize the error object with error_type and the Faraday response object. PurpleAir returns a human friendly
       # error message and type which is added here. You can also reference the response to view the raw response
       # from PurpleAir.
@@ -39,7 +38,7 @@ module PurpleAirApi
     end
 
     # Raised when the PurpleAir API returns the HTTP status code 500
-    class InternalServerError < BaseError
+    class ServerError < BaseError
     end
   end
 end

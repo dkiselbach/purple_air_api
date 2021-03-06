@@ -160,7 +160,7 @@ RSpec.describe PurpleAirApi::V1::RaiseHttpException do
       end
     end
 
-    context PurpleAirApi::V1::NotFoundError do
+    describe PurpleAirApi::V1::NotFoundError do
       let(:status_code) { 404 }
       let(:path) { 'V1/errors/not_found_error.json' }
 
@@ -168,6 +168,19 @@ RSpec.describe PurpleAirApi::V1::RaiseHttpException do
         expect { request }.to raise_error(described_class) do |error|
           expect(error.message).to eq 'Cannot find a sensor with the provided parameters.'
           expect(error.error_type).to eq 'NotFoundError'
+          expect(error.response_object).to be_instance_of(Faraday::Env)
+        end
+      end
+    end
+
+    describe PurpleAirApi::V1::ServerError do
+      let(:status_code) { 500 }
+      let(:path) { 'V1/errors/server_error.json' }
+
+      it 'raises InternalServerError' do
+        expect { request }.to raise_error(described_class) do |error|
+          expect(error.message).to eq 'Something went wrong in the request.'
+          expect(error.error_type).to eq 'ServerError'
           expect(error.response_object).to be_instance_of(Faraday::Env)
         end
       end
