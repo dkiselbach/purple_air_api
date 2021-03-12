@@ -41,8 +41,8 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
     end
 
     context 'when options are invalid' do
-      option_keys = %w[fields show_only location_type modified_since max_age bounding_box read_keys].map(&:to_sym)
-      options = %w[icon 1234 outside 54321 3600 1,2,3,4 key-one]
+      option_keys = %w[fields show_only location_type location_type modified_since max_age bounding_box read_keys].map(&:to_sym)
+      options = ['icon', '1234', 'outside', ['not_valid'], '54321', '3600', '1,2,3,4', 'key-one']
 
       option_keys.each_with_index do |field, index|
         it "returns OptionsError with error message for #{field}" do
@@ -51,6 +51,20 @@ RSpec.describe PurpleAirApi::V1::GetSensors do
             described_class.new(client: client.read_client, **options_hash)
           end.to raise_error(PurpleAirApi::V1::OptionsError)
         end
+      end
+    end
+
+    context 'when options are immutable' do
+      let(:options_hash) do
+        {
+          fields: %w[icon name latitude longitude altitude pm2.5 pm2.5_10minute pm2.5_30minute pm2.5_60minute].freeze,
+          location_type: %w[outside].freeze,
+          bounding_box: { nw: [37.804930, -122.448382].freeze, se: [37.794832, -122.393589].freeze }
+        }
+      end
+
+      it 'does not raise FrozenError' do
+        expect{ described_class.new(client: client.read_client, **options_hash) }.not_to raise_error
       end
     end
   end

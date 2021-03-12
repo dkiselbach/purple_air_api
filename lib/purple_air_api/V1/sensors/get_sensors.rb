@@ -130,20 +130,22 @@ module PurpleAirApi
       def location_type(location_type)
         return {} if location_type.nil?
 
-        unless location_type.instance_of?(Array) && location_type.first.instance_of?(String)
-          raise OptionsError,
-                "location_type must be an array of strings specifying either ['inside'], ['outside'], or both"
-        end
+        location_type_error unless location_type.instance_of?(Array) && location_type.first.instance_of?(String)
 
-        location_type.map!(&:downcase)
-
-        location_type_parameter(location_type)
+        location_type_parameter(location_type.map(&:downcase))
       end
 
       def location_type_parameter(location_type)
         return {} if location_type.include?('outside') && location_type.include?('inside')
         return { location_type: 1 } if location_type.include?('inside')
         return { location_type: 0 } if location_type.include?('outside')
+
+        location_type_error
+      end
+
+      def location_type_error
+        raise OptionsError,
+              "location_type must be an array of strings specifying either ['inside'], ['outside'], or both"
       end
 
       def modified_since(timestamp)
