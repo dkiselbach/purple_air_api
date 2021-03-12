@@ -20,6 +20,8 @@ Or install it yourself as:
 To use this gem, instantiate an instance of a PurpleAirApi client. The write token is
 optional and currently no write actions are implemented in this gem.
 
+For further information on what client methods are available, refer to the [documentation here](https://dkiselbach.github.io/purple_air_api/PurpleAirApi/V1/Client.html).
+
 `client = PurpleAirApi.client(read_token: your_read_token, write_token: your_write_token)`
 
 You can then use this client to interact with the various API methods under the client:
