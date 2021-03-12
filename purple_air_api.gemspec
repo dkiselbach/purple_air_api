@@ -8,9 +8,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Dylan Kiselbach']
   spec.email         = ['dylankiselbach@gmail.com']
 
-  spec.summary       = 'This is an library to assist in interacting with the PurpleAir API.'
-  spec.description   = 'To use this gem you will need your own read and write key from PurpleAir which can be retrieved
-                        by contacting their support team https://www2.purpleair.com/pages/contact-us.'
+  spec.summary       = 'This is a Ruby wrapper for the PurpleAir API.'
+  spec.description   = 'This gem is a API wrapper for the PurpleAir API intended to help in making requests
+                        to PurpleAir. Please refer to the documentation for details on usage and how to get
+                        started using this gem.'
   spec.homepage      = 'https://github.com/dkiselbach/purple_air_api'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.7.0')

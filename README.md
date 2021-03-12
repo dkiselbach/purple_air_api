@@ -155,6 +155,11 @@ end
 
 Documentation for this gem can be found [here.](https://dkiselbach.github.io/purple_air_api/)
 
+## PurpleAir Documentation and Read and Write Tokens
+
+This wrapper was written using the [PurpleAir API Documentation](https://api.purpleair.com/). You will require a read
+and write token in order to use the PurpleAir API which can be received by [reaching out to PurpleAir](https://www2.purpleair.com/pages/contact-us).
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
