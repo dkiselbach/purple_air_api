@@ -58,11 +58,9 @@
       </div>
 
       <div id="content"><div id='filecontents'><h1 id="purpleairapi">PurpleAirApi</h1>
-
-<p>This is a client for interacting with the PurpleAir API. This was written using the V1 of the API. In order to use this gem, you must have been granted read and write tokens from PurpleAir.</p>
+<p>This is a Ruby wrapper for the PurpleAir API.</p>
 
 <h2 id="installation">Installation</h2>
-
 <p>Add this line to your application’s Gemfile:</p>
 
 <p><code>ruby
@@ -71,29 +69,149 @@ gem 'purple_air_api'
 
 <p>And then execute:</p>
 
-<pre class="code ruby"><code class="ruby">$ bundle install
-</code></pre>
+<p><code>bundle install</code></p>
 
 <p>Or install it yourself as:</p>
 
-<pre class="code ruby"><code class="ruby">$ gem install purple_air_api
-</code></pre>
+<p><code>gem install purple_air_api</code></p>
 
 <h2 id="usage">Usage</h2>
-
-<p>To use this gem, instantiate an instance of a PurpleAirApi client by making the following request:</p>
+<p>To use this gem, instantiate an instance of a PurpleAirApi client. The write token is
+optional and currently no write actions are implemented in this gem.</p>
 
 <p><code>client = PurpleAirApi.client(read_token: your_read_token, write_token: your_write_token)</code></p>
 
-<p>You can then use this client to interact with the various API methods under the client like:</p>
+<p>You can then use this client to interact with the various API methods under the client:</p>
 
-<p><code>client.request_sensors(options)</code></p>
+<h3 id="requesting-multiple-sensors">Requesting multiple sensors</h3>
+<p>```ruby
+# Optional parameters are added using a hash. For a full list of options refer to the documentation.</p>
 
-<p>Options would be and of the parameters you would like to pass onto the PurpleAir API. The gem will parse the parameters into the format required by the API.</p>
+<p>nw_lat_long = [37.804930, -122.448382]
+se_lat_long = [37.794832, -122.393589]
+fields = %w[icon name latitude longitude altitude pm2.5 pm2.5_10minute pm2.5_30minute pm2.5_60minute]
+location_type = %w[outside]
+show_only = [20, 40, 55, 120]</p>
+
+<p>options = {
+  fields: fields,
+  location_type: location_type,
+  bounding_box: { nw: nw_lat_long, se: se_lat_long },
+  show_only: show_only
+}</p>
+
+<p>response = client.request_sensors(options)</p>
+
+<p>response.parsed_response[:data][40] # access the individual sensor data using the parsed_response hash
+```</p>
+
+<h3 id="requesting-a-single-sensor-index">Requesting a single sensor index</h3>
+<p>```ruby
+response = client.request_sensor(sensor_index: 1)</p>
+
+<p>current_air_quality = response.json_response[:sensor][:”pm2.5_a”]
+```</p>
+
+<h3 id="a-sample-service-object-for-a-lat-long-bounding-box">A sample service object for a lat-long bounding box</h3>
+<p>```ruby
+# frozen_string_literal: true</p>
+
+<p>require ‘purple_air_api’
+require ‘dotenv/load’</p>
+
+<p>module AirQuality
+  # Class for making requests for local sensor data with a lat-long bounding box
+  class GetSensors
+    NW_LAT_LONG = [37.804930, -122.448382].freeze
+    SE_LAT_LONG = [37.794832, -122.393589].freeze
+    DEFAULT_FIELDS = %w[icon name latitude longitude altitude pm2.5 pm2.5_10minute pm2.5_30minute pm2.5_60minute].freeze
+    DEFAULT_LOCATION_TYPE = %w[outside].freeze</p>
+
+<pre class="code ruby"><code class="ruby">def self.call
+  new.request
+end
+
+def request
+  PurpleAirApi.client(read_token: read_token).request_sensors(fields)
+end
+
+def read_token
+  ENV[&#39;READ_TOKEN&#39;]
+end
+
+def fields
+  {
+    fields: DEFAULT_FIELDS,
+    location_type: DEFAULT_LOCATION_TYPE,
+    bounding_box: { nw: NW_LAT_LONG, se: SE_LAT_LONG }
+  }
+end   end end ````
+</code></pre>
+
+<h3 id="a-sample-service-object-for-a-single-sensor">A sample service object for a single sensor</h3>
+<p>```ruby
+# frozen_string_literal: true</p>
+
+<p>require ‘purple_air_api’
+require ‘dotenv/load’</p>
+
+<p>module AirQuality
+  # Class for making requests for an individual sensor
+  class GetSensor
+    SENSOR_INDEX = 54_849</p>
+
+<pre class="code ruby"><code class="ruby">def self.call
+  new.request
+end
+
+def request
+  PurpleAirApi.client(read_token: read_token).request_sensor(sensor_index: SENSOR_INDEX)
+end
+
+def read_token
+  ENV[&#39;READ_TOKEN&#39;]
+end   end end ```
+</code></pre>
+
+<h3 id="in-a-sinatra-app">In a Sinatra app</h3>
+
+<p>```ruby
+# frozen_string_literal: true</p>
+
+<p>require ‘sinatra’
+require “sinatra/json”
+require ‘dotenv/load’
+require ‘purple_air_api’</p>
+
+<p>module HomeHub
+  # App server class for running the HomeHub app
+  class App &lt; Sinatra::Base</p>
+
+<pre class="code ruby"><code class="ruby">get &#39;/sensors/:id&#39; do
+  json purple_air_client.request_sensor(sensor_index: params[:id].to_i).json_response
+end
+
+get &#39;/sensors&#39; do
+  json purple_air_client.request_sensors.json_response
+end
+
+def purple_air_client
+  @purple_air_client ||= PurpleAirApi.client(read_token: read_token)
+end
+
+def read_token
+  @read_token ||= ENV[&#39;READ_TOKEN&#39;]
+end   end end ```
+</code></pre>
 
 <h2 id="documentation">Documentation</h2>
 
-<p>Documentation for this gem can be found <a href="https://dkiselbach.github.io/purple_air_api/">here.</a>.</p>
+<p>Documentation for this gem can be found <a href="https://dkiselbach.github.io/purple_air_api/">here.</a></p>
+
+<h2 id="purpleair-documentation-and-read-and-write-tokens">PurpleAir Documentation and Read and Write Tokens</h2>
+
+<p>This wrapper was written using the <a href="https://api.purpleair.com/">PurpleAir API Documentation</a>. You will require a read
+and write token in order to use the PurpleAir API which can be received by <a href="https://www2.purpleair.com/pages/contact-us">reaching out to PurpleAir</a>.</p>
 
 <h2 id="development">Development</h2>
 
@@ -113,13 +231,13 @@ gem 'purple_air_api'
 
 <h2 id="code-of-conduct">Code of Conduct</h2>
 
-<p>Everyone interacting in the PurpleAirApi project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the <a href="https://github.com/dkiselbach/purple_air_api/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>.</p>
+<p>Everyone interacting in the PurpleAirApi project’s codebase, issue trackers, chat rooms and mailing lists is expected to follow the <a href="https://github.com/dkiselbach/purple_air_api/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>.</p>
 
 <p><a href="code_of_conduct.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg" alt="Contributor Covenant" /></a></p>
 </div></div>
 
       <div id="footer">
-  Generated on Sat Mar  6 13:41:30 2021 by
+  Generated on Fri Mar 12 10:06:10 2021 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.26 (ruby-3.0.0).
 </div>
